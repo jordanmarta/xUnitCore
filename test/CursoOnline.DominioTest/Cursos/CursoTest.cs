@@ -1,24 +1,57 @@
-﻿using CursoOnline.DominioTest._Util;
+﻿using Bogus;
+using CursoOnline.Dominio.Cursos;
+using CursoOnline.DominioTest._Builders;
+using CursoOnline.DominioTest._Util;
 using ExpectedObjects;
 using System;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CursoOnline.DominioTest.Cursos
 {
-    public class CursoTest
+    public class CursoTest : IDisposable
     {
+        private readonly string _nome;
+        private readonly string _descricao;
+        private readonly double _cargaHoraria;
+        private readonly EPublicoAlvo _publicoAlvo;
+        private readonly double _valor;
+
+        public ITestOutputHelper _output { get; }
+
+        public CursoTest(ITestOutputHelper outputHelper)
+        {
+            var faker = new Faker();
+
+            _output = outputHelper;
+            _output.WriteLine("Construtor sendo executado");
+
+            _nome = faker.Random.Word();
+            _descricao = faker.Lorem.Paragraph();
+            _cargaHoraria = faker.Random.Double(50, 1000);
+            _publicoAlvo = EPublicoAlvo.Estudante;
+            _valor = faker.Random.Double(100, 1000);
+        }
+
+        public void Dispose()
+        {
+            _output.WriteLine("Dispose sendo executado");
+        }
+
         [Fact]
         public void DeveCriarCurso()
         {
             var cursoEsperado = new
             {
-                nome = "Informática",
-                cargaHoraria = (double)40,
-                publicoAlvo = EPublicoAlvo.Estudante,
-                valor = (double)80
+                Nome = "Informática",
+                CargaHoraria = (double)40,
+                PublicoAlvo = EPublicoAlvo.Estudante,
+                Valor = (double)80,
+                Descricao = _descricao
             };
 
-            var curso = new Curso(cursoEsperado.nome, cursoEsperado.cargaHoraria, cursoEsperado.publicoAlvo, cursoEsperado.valor);
+            var curso = new Curso(cursoEsperado.Nome, cursoEsperado.Descricao, cursoEsperado.CargaHoraria, 
+                cursoEsperado.PublicoAlvo, cursoEsperado.Valor);
 
             cursoEsperado.ToExpectedObject().ShouldMatch(curso);
         }
@@ -30,16 +63,16 @@ namespace CursoOnline.DominioTest.Cursos
         {
             var cursoEsperado = new
             {
-                nome = "Informática",
-                cargaHoraria = (double)40,
-                publicoAlvo = EPublicoAlvo.Estudante,
-                valor = (double)80
+                nome = _nome,
+                cargaHoraria = _cargaHoraria,
+                publicoAlvo = _publicoAlvo,
+                valor = _valor
             };
 
-
             Assert.Throws<ArgumentException>(() =>
-                new Curso(nomeInvalido, cursoEsperado.cargaHoraria, cursoEsperado.publicoAlvo, cursoEsperado.valor))
-                .ComMensagem("Nome inválido");        }
+                CursoBuilder.Novo().ComNome(nomeInvalido).Build()) 
+                .ComMensagem("Nome inválido");        
+        }
 
         [Theory]
         [InlineData(0)]
@@ -47,17 +80,8 @@ namespace CursoOnline.DominioTest.Cursos
         [InlineData(-100)]
         public void NaoDeveCursoTerUmaCargaMenorQue1(double cargaHorariaInvalida)
         {
-            var cursoEsperado = new
-            {
-                nome = "Informática",
-                cargaHoraria = (double)40,
-                publicoAlvo = EPublicoAlvo.Estudante,
-                valor = (double)80
-            };
-
-
             Assert.Throws<ArgumentException>(() =>
-                new Curso(cursoEsperado.nome, cargaHorariaInvalida, cursoEsperado.publicoAlvo, cursoEsperado.valor))
+                CursoBuilder.Novo().ComCargaHoraria(cargaHorariaInvalida).Build())
                 .ComMensagem("Carga horária inválida");
         }
 
@@ -67,50 +91,9 @@ namespace CursoOnline.DominioTest.Cursos
         [InlineData(-100)]
         public void NaoDeveCursoTerUmValorMenorQue1(double valorInvalido)
         {
-            var cursoEsperado = new
-            {
-                nome = "Informática",
-                cargaHoraria = (double)40,
-                publicoAlvo = EPublicoAlvo.Estudante,
-                valor = (double)80
-            };
-
             Assert.Throws<ArgumentException>(() =>
-                new Curso(cursoEsperado.nome, cursoEsperado.cargaHoraria, cursoEsperado.publicoAlvo, valorInvalido))
+                CursoBuilder.Novo().ComValor(valorInvalido).Build())
                 .ComMensagem("Valor inválido");
         }
-    }
-
-    public enum EPublicoAlvo
-    {
-        Estudante,
-        Universitário,
-        Emprego,
-        Empreendedor
-    }
-
-    public class Curso
-    {
-        public string nome { get; set; }
-        public double cargaHoraria { get; set; }
-        public EPublicoAlvo publicoAlvo { get; set; }
-        public double valor { get; set; }
-
-        public Curso(string nome, double cargaHoraria, EPublicoAlvo publicoAlvo, double valor)
-        {
-            if (string.IsNullOrEmpty(nome))
-                throw new ArgumentException("Nome inválido");
-
-            if (cargaHoraria < 1)
-                throw new ArgumentException("Carga horária inválida");
-
-            if (valor < 1)
-                throw new ArgumentException("Valor inválido");
-
-            this.nome = nome;
-            this.cargaHoraria = cargaHoraria;
-            this.publicoAlvo = publicoAlvo;
-            this.valor = valor;
-        }
-    }
+    }    
 }
