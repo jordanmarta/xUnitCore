@@ -7,11 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CursoOnline.DominioTest", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CursoOnline.Dominio", "src\CursoOnline.Dominio\CursoOnline.Dominio.csproj", "{FE674E37-567E-40DC-B559-8B8FBAFD8296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CursoOnline.Web", "CursoOnline.Web\CursoOnline.Web.csproj", "{92565986-E58D-4354-B19A-5E8687BFD437}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CursoOnline.Web", "CursoOnline.Web\CursoOnline.Web.csproj", "{92565986-E58D-4354-B19A-5E8687BFD437}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CursoOnline.Dados", "CursoOnline.Dados\CursoOnline.Dados.csproj", "{798C0A02-CB72-4F9E-917D-AA753CA07127}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CursoOnline.Dados", "CursoOnline.Dados\CursoOnline.Dados.csproj", "{798C0A02-CB72-4F9E-917D-AA753CA07127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CursoOnline.Ioc", "CursoOnline.Ioc\CursoOnline.Ioc.csproj", "{61048986-58C4-42B5-8B84-E11F5E98AA93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CursoOnline.Ioc", "CursoOnline.Ioc\CursoOnline.Ioc.csproj", "{61048986-58C4-42B5-8B84-E11F5E98AA93}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E9577C98-653C-4940-AB74-8B5EE4210439}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

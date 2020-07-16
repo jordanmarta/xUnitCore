@@ -1,5 +1,6 @@
 ﻿using CursoOnline.Dominio.Cursos;
-using CursoOnline.DominioTest.Cursos;
+using CursoOnline.Dominio.PublicosAlvo;
+using System;
 
 namespace CursoOnline.DominioTest._Builders
 {
@@ -10,6 +11,8 @@ namespace CursoOnline.DominioTest._Builders
         private double _cargaHoraria = 40;
         private EPublicoAlvo _publicoAlvo = EPublicoAlvo.Estudante;
         private double _valor = 80;
+        private int _id;
+
         public static CursoBuilder Novo()
         {
             return new CursoBuilder();
@@ -45,9 +48,25 @@ namespace CursoOnline.DominioTest._Builders
             return this;
         }
 
+        public CursoBuilder ComId(int id)
+        {
+            _id = id;
+            return this;
+        }
+
         public Curso Build()
         {
-            return new Curso(_nome, _descricao, _cargaHoraria, _publicoAlvo, _valor);
+            var curso = new Curso(_nome, _descricao, _cargaHoraria, _publicoAlvo, _valor);
+
+            if(_id > 0)
+            {
+                // Setando o Id com reflection...
+                var propertyInfo = curso.GetType().GetProperty("Id");
+                propertyInfo.SetValue(curso, Convert.ChangeType(_id, propertyInfo.PropertyType), null);
+            }
+
+            return curso;
         }
+
     }
 }
